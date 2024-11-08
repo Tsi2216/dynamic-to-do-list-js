@@ -7,22 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
 
     // Add task event listener
-    addButton.addEventListener('click', addTask);
+    addButton.addEventListener('click', () => addTask(taskInput.value));
     taskInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
-            addTask();
+            addTask(taskInput.value);
         }
     });
 
-    function addTask() {
-        const taskText = taskInput.value.trim();
-        if (taskText === "") {
+    function loadTasks() {
+        const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        storedTasks.forEach(taskText => addTask(taskText, false)); // 'false' prevents saving again
+    }
+
+    function addTask(taskText, save = true) {
+        const trimmedText = taskText.trim();
+        if (trimmedText === "") {
             alert("Please enter a task.");
             return;
         }
 
         const li = document.createElement('li');
-        li.textContent = taskText;
+        li.textContent = trimmedText;
 
         const removeButton = document.createElement('button');
         removeButton.textContent = "Remove";
@@ -34,28 +39,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         li.appendChild(removeButton);
         taskList.appendChild(li);
+        
+        if (save) {
+            const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            storedTasks.push(trimmedText);
+            localStorage.setItem('tasks', JSON.stringify(storedTasks));
+        }
+
         taskInput.value = ""; // Clear input
-
         updateLocalStorage();
-    }
-
-    function loadTasks() {
-        const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-        storedTasks.forEach(taskText => {
-            const li = document.createElement('li');
-            li.textContent = taskText;
-
-            const removeButton = document.createElement('button');
-            removeButton.textContent = "Remove";
-            removeButton.className = 'remove-btn';
-            removeButton.onclick = function() {
-                taskList.removeChild(li);
-                updateLocalStorage();
-            };
-
-            li.appendChild(removeButton);
-            taskList.appendChild(li);
-        });
     }
 
     function updateLocalStorage() {
