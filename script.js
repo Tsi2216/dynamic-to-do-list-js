@@ -6,8 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load tasks from local storage
     loadTasks();
 
-    // Add task event listener
+    // Add event listener for the add button
     addButton.addEventListener('click', addTask);
+
+    // Add event listener for the task input to handle Enter key
     taskInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
             addTask();
@@ -28,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const li = document.createElement('li'); // Create a new list item
         li.textContent = taskText; // Set the text content to the task text
+        li.classList.add('task-item'); // Add a class to the list item for styling
 
         const removeButton = document.createElement('button'); // Create a remove button
         removeButton.textContent = "Remove"; // Set button text
@@ -36,6 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
             taskList.removeChild(li); // Remove the list item when clicked
             updateLocalStorage();
         };
+
+        // Optionally, add a class to the remove button
+        removeButton.classList.add('btn-remove'); // Add a class for styling
 
         li.appendChild(removeButton); // Append the remove button to the list item
         taskList.appendChild(li); // Append the list item to the task list

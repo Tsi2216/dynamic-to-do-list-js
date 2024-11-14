@@ -54,6 +54,11 @@ li {
     align-items: center;
 }
 
+.task-item {
+    background-color: #f9f9f9; /* Light background for tasks */
+    border: 1px solid #ccc; /* Border for tasks */
+}
+
 .remove-btn {
     cursor: pointer;
     background-color: #ff6347;
